@@ -3,6 +3,16 @@ import sys
 from PIL import Image
 
 def convert_image_to_ascii(img, interval):
+    """
+    Converts an Image object to an array of ascii characters.
+
+    Params:
+        img : Image - the image object to convert
+        interval : int - the width of the square of pixels per ascii character
+
+    Returns:
+        [[str]] - a two dimensional array of ascii characters
+    """
     img_data = downsize_image(np.asarray(img), interval)
     ascii_data = []
     ascii_chars = '@$#*!=;:~-,. '
@@ -18,6 +28,17 @@ def convert_image_to_ascii(img, interval):
     return ascii_data
 
 def downsize_image(img_data, interval):
+    """
+    Scales down an image tensor by taking a square of pixels and shrinking them
+    down to one pixel, averaging the colors.
+
+    Params:
+        img_data : [[[int]]] : a 3-dimensional tensor representing image data (width, height, color)
+        interval : int - the width of the square of pixels to scale down
+
+    Returns:
+        [[[int]]] - the downsized image tensor
+    """
     old_h = img_data.shape[0]
     old_w = img_data.shape[1]
 
@@ -36,6 +57,15 @@ def downsize_image(img_data, interval):
     return new_img_data
 
 def greyscale(rgb):
+    """
+    Converts RGB values to greyscale, ranging from 0 to 255, inclusive.
+
+    Params:
+        rgb : [int] - an array of 3 integer values representing the rgb values
+
+    Returns:
+        int - the greyscale value of the rgb
+    """
     return 0.3 * rgb[0] + 0.59 * rgb[1] + 0.11 * rgb[2]
 
     
