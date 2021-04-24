@@ -8,12 +8,12 @@ def convert_image_to_ascii(img, interval):
 
     Params:
         img : Image - the image object to convert
-        interval : int - the width of the square of pixels per ascii character
+        interval : int - the width of the rectangle of pixels per ascii character
 
     Returns:
         [[str]] - a two dimensional array of ascii characters
     """
-    img_data = downsize_image(np.asarray(img), interval)
+    img_data = downsize_image(np.asarray(img), interval, 2)
     ascii_data = []
     ascii_chars = '@$#*!=;:~-,. '
 
@@ -27,30 +27,33 @@ def convert_image_to_ascii(img, interval):
 
     return ascii_data
 
-def downsize_image(img_data, interval):
+def downsize_image(img_data, interval, ratio):
     """
-    Scales down an image tensor by taking a square of pixels and shrinking them
-    down to one pixel, averaging the colors.
+    Scales down an image tensor by taking a rectangle of pixels and shrinking them
+    down to one pixel, averaging the colors. As the space that an ascii character
+    takes up is taller than it is wide, the ratio is used to account for that.
 
     Params:
         img_data : [[[int]]] : a 3-dimensional tensor representing image data (width, height, color)
-        interval : int - the width of the square of pixels to scale down
+        interval : int - the width of the rectangle of pixels to scale down
+        ratio : int - the ratio of height to width
 
     Returns:
         [[[int]]] - the downsized image tensor
     """
     old_h = img_data.shape[0]
     old_w = img_data.shape[1]
+    scaled_interval = interval * ratio
 
-    new_img_data = np.zeros((old_h // interval, old_w // interval, 3))
+    new_img_data = np.zeros((old_h // scaled_interval, old_w // interval, 3))
 
-    for newy, y in enumerate(range(0, old_h - interval, interval)):
+    for newy, y in enumerate(range(0, old_h - scaled_interval, scaled_interval)):
         for newx, x in enumerate(range(0, old_w - interval, interval)):
             color_sum = np.array([0, 0, 0])
-            for yi in range(interval):
+            for yi in range(scaled_interval):
                 for xi in range(interval):
                     color_sum = np.add(color_sum, img_data[y + yi][x + xi][:3])
-            color_avg = np.divide(color_sum, interval * interval)
+            color_avg = np.divide(color_sum, scaled_interval * interval)
 
             new_img_data[newy][newx] = color_avg
 
