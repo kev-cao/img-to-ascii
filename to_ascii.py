@@ -36,14 +36,14 @@ def downsize_image(img_data, interval, ratio):
     Params:
         img_data : [[[int]]] : a 3-dimensional tensor representing image data (width, height, color)
         interval : int - the width of the rectangle of pixels to scale down
-        ratio : int - the ratio of height to width
+        ratio : float - the ratio of height to width
 
     Returns:
         [[[int]]] - the downsized image tensor
     """
     old_h = img_data.shape[0]
     old_w = img_data.shape[1]
-    scaled_interval = interval * ratio
+    scaled_interval = int(interval * ratio)
 
     new_img_data = np.zeros((old_h // scaled_interval, old_w // interval, 3))
 
