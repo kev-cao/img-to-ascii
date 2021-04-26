@@ -23,4 +23,4 @@ The ascii version will be stored in the `output.txt` file.
 
 **After**
 
-![After](https://i.imgur.com/AOgc4Cm.png)
+![After](https://i.imgur.com/IK3YpwK.png)
